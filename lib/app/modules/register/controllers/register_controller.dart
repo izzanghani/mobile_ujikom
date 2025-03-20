@@ -1,8 +1,13 @@
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:get/get_connect/connect.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sislab/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:sislab/app/utils/api.dart';
+
 class RegisterController extends GetxController {
   final _getConnect = GetConnect();
   TextEditingController nameController = TextEditingController();
@@ -30,7 +35,11 @@ class RegisterController extends GetxController {
         backgroundColor: Colors.red,
         colorText: Colors.white,
         forwardAnimationCurve: Curves.bounceIn,
-        margin: const EdgeInsets.only(top: 10, left: 5, right: 5),
+        margin: const EdgeInsets.only(
+          top: 10,
+          left: 5,
+          right: 5,
+        ),
       );
     }
   }

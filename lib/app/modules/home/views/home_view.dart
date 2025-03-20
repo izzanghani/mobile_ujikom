@@ -27,7 +27,7 @@ Widget build(BuildContext context) {
               height: 15,
             ),
             Text(
-              'Aplikasi Portal Berita Indonesia',
+              'Aplikasi SISLAB',
               style: GoogleFonts.roboto(
                 textStyle: const TextStyle(
                   fontWeight: FontWeight.bold,

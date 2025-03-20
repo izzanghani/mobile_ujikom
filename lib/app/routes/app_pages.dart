@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/anggota/bindings/anggota_binding.dart';
+import '../modules/anggota/views/anggota_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -36,6 +38,11 @@ class AppPages {
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
       binding: DashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.ANGGOTA,
+      page: () => const AnggotaView(),
+      binding: AnggotaBinding(),
     ),
   ];
 }

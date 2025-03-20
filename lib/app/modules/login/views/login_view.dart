@@ -75,29 +75,8 @@ class LoginView extends GetView<LoginController> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 50,
-              width: 250,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  Get.to(() => RegisterView());
-                },
-                child: const Text(
-                  'Register',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                ),
-              ),
-            ),
+           
+           
           ],
         ),
       ),

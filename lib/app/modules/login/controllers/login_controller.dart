@@ -34,7 +34,7 @@ class LoginController extends GetxController {
     });
 
     if (response.statusCode == 200) {
-      authToken.write('token', response.body['token']);
+      authToken.write('token', response.body['access_token']);
       Get.offAll(() => const DashboardView());
     } else {
       Get.snackbar(
