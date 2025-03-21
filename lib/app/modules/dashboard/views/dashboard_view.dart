@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sislab/app/modules/anggota/controllers/anggota_controller.dart';
 import 'package:sislab/app/routes/app_pages.dart'; // Pastikan Anda mengimpor rute yang benar
 
 class DashboardView extends StatelessWidget {
@@ -7,6 +8,8 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AnggotaController anggotaController = Get.put(AnggotaController()); // Inisialisasi Controller
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard Inventaris'),
@@ -40,7 +43,6 @@ class DashboardView extends StatelessWidget {
               leading: const Icon(Icons.home),
               title: const Text('Home'),
               onTap: () {
-                // Navigate to Home
                 Navigator.pop(context);
               },
             ),
@@ -48,11 +50,9 @@ class DashboardView extends StatelessWidget {
               leading: const Icon(Icons.settings),
               title: const Text('Settings'),
               onTap: () {
-                // Navigate to Settings
                 Navigator.pop(context);
               },
             ),
-            // Add more menu items here
           ],
         ),
       ),
@@ -71,17 +71,23 @@ class DashboardView extends StatelessWidget {
                 crossAxisCount: 2,
                 childAspectRatio: 1.5,
                 children: [
-                  _buildStatCard('Anggota', '50', Colors.blue, () {
-                    Get.toNamed(Routes.ANGGOTA); // Navigasi ke halaman Anggota
-                  }),
+                  // ✅ Gunakan Obx untuk menampilkan jumlah anggota secara real-time
+                  Obx(() => _buildStatCard(
+                        'Anggota',
+                        '${anggotaController.anggotaList.length}', // Menampilkan jumlah data anggota dari controller
+                        Colors.blue,
+                        () {
+                          Get.toNamed(Routes.ANGGOTA);
+                        },
+                      )),
                   _buildStatCard('Barang', '200', Colors.green, () {
-                    // Get.toNamed(Routes.BARANG); // Navigasi ke halaman Barang
+                    // Get.toNamed(Routes.BARANG);
                   }),
                   _buildStatCard('Peminjaman', '30', Colors.orange, () {
-                    // Get.toNamed(Routes.PEMINJAMAN); // Navigasi ke halaman Peminjaman
+                    // Get.toNamed(Routes.PEMINJAMAN);
                   }),
                   _buildStatCard('Pengembalian', '25', Colors.red, () {
-                    // Get.toNamed(Routes.PENGEMBALIAN); // Navigasi ke halaman Pengembalian
+                    // Get.toNamed(Routes.PENGEMBALIAN);
                   }),
                 ],
               ),
