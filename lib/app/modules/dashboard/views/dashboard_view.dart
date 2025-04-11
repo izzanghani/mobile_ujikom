@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sislab/app/modules/anggota/controllers/anggota_controller.dart';
 import 'package:sislab/app/modules/barang/controllers/barang_controller.dart';
+import 'package:sislab/app/modules/peminjaman/controllers/peminjaman_controller.dart'; // ✅ Import controller peminjaman
 import 'package:sislab/app/routes/app_pages.dart';
 
 class DashboardView extends StatelessWidget {
@@ -10,11 +11,12 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final anggotaController = Get.put(AnggotaController());
-    final barangController = Get.put(BarangController()); // ✅ Tambahkan BarangController
+    final barangController = Get.put(BarangController());
+    final peminjamanController = Get.put(PeminjamanController()); // ✅ Tambah controller peminjaman
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard Inventaris'),
+        title: const Text('SISLAB'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -60,7 +62,7 @@ class DashboardView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'SISLAB',
+                  'Dasboard',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
@@ -74,7 +76,7 @@ class DashboardView extends StatelessWidget {
                       Obx(() => _buildStatCard(
                             'Anggota',
                             '${anggotaController.anggotaList.length}',
-                            Colors.blue,
+                            const Color.fromARGB(255, 49, 160, 250),
                             () => Get.toNamed(Routes.ANGGOTA),
                           )),
                       Obx(() => _buildStatCard(
@@ -83,19 +85,18 @@ class DashboardView extends StatelessWidget {
                             Colors.green,
                             () => Get.toNamed(Routes.BARANG),
                           )),
-                      _buildStatCard(
-                        'Peminjaman',
-                        '30',
-                        Colors.orange,
-                        () {
-                          // Get.toNamed(Routes.PEMINJAMAN);
-                        },
-                      ),
+                      Obx(() => _buildStatCard(
+                            'Peminjaman',
+                            '${peminjamanController.peminjamanList.length}',
+                            Colors.orange,
+                            () => Get.toNamed(Routes.PEMINJAMAN),
+                          )),
                       _buildStatCard(
                         'Pengembalian',
-                        '25',
+                        '1',
                         Colors.red,
                         () {
+                          // Future: navigasi ke halaman pengembalian
                           // Get.toNamed(Routes.PENGEMBALIAN);
                         },
                       ),

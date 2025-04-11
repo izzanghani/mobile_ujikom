@@ -16,7 +16,7 @@ class BarangController extends GetxController {
   }
 
   void fetchBarang() async {
-    String token = "Bearer 11|QsTfMwMgwfxZqAChCN4TX66IAHBr5dcWnRcR8C28c1cfe781"; // Ganti dengan token valid
+    String token = "Bearer 15|C1nNyihSTb09vWAmFmNbEZ0K4CLGe2fGa6ghDYud6d00aff1"; // Ganti dengan token valid
 
     try {
       isLoading(true);
