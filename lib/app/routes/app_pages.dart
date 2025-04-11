@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/anggota/bindings/anggota_binding.dart';
 import '../modules/anggota/views/anggota_view.dart';
+import '../modules/barang/bindings/barang_binding.dart';
+import '../modules/barang/views/barang_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -43,6 +45,11 @@ class AppPages {
       name: _Paths.ANGGOTA,
       page: () => const AnggotaView(),
       binding: AnggotaBinding(),
+    ),
+    GetPage(
+      name: _Paths.BARANG,
+      page: () => const BarangView(),
+      binding: BarangBinding(),
     ),
   ];
 }
