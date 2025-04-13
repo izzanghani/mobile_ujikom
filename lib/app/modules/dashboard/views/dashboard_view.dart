@@ -245,7 +245,7 @@ class _DashboardContent extends StatelessWidget {
                 ),
                 _buildCard(
                  'Barang',
-                  barangController.listBarang.length.toString(),
+                  barangController.barangList.length.toString(),
                   LucideIcons.box,
                   Colors.green[50]!,
                   () => Get.toNamed(Routes.BARANG),
