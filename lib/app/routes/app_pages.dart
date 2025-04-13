@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../modules/anggota/bindings/anggota_binding.dart';
 import '../modules/anggota/views/anggota_view.dart';
 import '../modules/barang/bindings/barang_binding.dart';
-import '../modules/barang/views/barang_view.dart';
+import '../modules/barang/views/BarangView.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -12,6 +12,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/peminjaman/bindings/peminjaman_binding.dart';
 import '../modules/peminjaman/views/peminjaman_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 
@@ -50,13 +52,18 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.BARANG,
-      page: () => const BarangView(),
+      page: () =>  BarangView(),
       binding: BarangBinding(),
     ),
     GetPage(
       name: _Paths.PEMINJAMAN,
       page: () => const PeminjamanView(),
       binding: PeminjamanBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

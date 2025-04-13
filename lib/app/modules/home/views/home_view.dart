@@ -1,42 +1,89 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:lottie/lottie.dart';
 
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
+
   @override
-Widget build(BuildContext context) {
-  HomeController controller = Get.put(HomeController());
+  Widget build(BuildContext context) {
+    final controller = Get.put(HomeController());
+
     return Scaffold(
-      backgroundColor: HexColor('#feeee8'),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Stack(
           children: [
-            Lottie.network(
-              'https://gist.githubusercontent.com/olipiskandar/2095343e6b34255dcfb042166c4a3283/raw/d76e1121a2124640481edcf6e7712130304d6236/praujikom_kucing.json',
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text(
-              'Aplikasi SISLAB',
-              style: GoogleFonts.roboto(
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
+            /// 🌟 Konten Tengah
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Lottie.asset(
+                      'assets/lottie/1.json',
+                      height: 180,
+                      repeat: true,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'SISLAB',
+                      style: GoogleFonts.poppins(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigo.shade800,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Sistem Informasi Laboratorium',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
+
+            /// 📝 Copyright & Versi
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: Column(
+                children: [
+                  Text(
+                    '© 2025 - SISLAB v1.0',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Universitas XYZ · Teknik Informatika',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
     );
-  }}
+  }
+}

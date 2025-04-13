@@ -6,18 +6,16 @@ import 'package:sislab/app/utils/api.dart';
 
 class LoginController extends GetxController {
   final _getConnect = GetConnect();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  final authToken = GetStorage();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  final authStorage = GetStorage();
+  final isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
+    _getConnect.timeout = const Duration(seconds: 10); // optional
   }
 
   @override
@@ -28,24 +26,49 @@ class LoginController extends GetxController {
   }
 
   void loginNow() async {
-    final response = await _getConnect.post(BaseUrl.login, {
-      'email': emailController.text,
-      'password': passwordController.text,
-    });
+    isLoading.value = true;
 
-    if (response.statusCode == 200) {
-      authToken.write('token', response.body['access_token']);
-      Get.offAll(() => const DashboardView());
-    } else {
-      Get.snackbar(
-        'Error',
-        response.body['error'].toString(),
-        icon: const Icon(Icons.error),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        forwardAnimationCurve: Curves.bounceIn,
-        margin: const EdgeInsets.only(top: 10, left: 5, right: 5),
-      );
+    try {
+      final response = await _getConnect.post(BaseUrl.login, {
+        'email': emailController.text.trim(),
+        'password': passwordController.text.trim(),
+      });
+
+      print("LOGIN RESPONSE: ${response.body}");
+
+      isLoading.value = false;
+
+      if (response.statusCode == 200 && response.body != null) {
+        final token = response.body['access_token'];
+        if (token != null && token != "") {
+          authStorage.write('token', token);
+          Get.offAll(() => const DashboardView());
+        } else {
+          Get.snackbar('Login Gagal', 'Token tidak ditemukan dalam respons.');
+        }
+      } else {
+        final errorMessage = response.body?['message'] ??
+            response.body?['error'] ??
+            "Login gagal. Periksa email dan password.";
+
+        Get.snackbar(
+          'Login Gagal',
+          errorMessage.toString(),
+          icon: const Icon(Icons.error),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar('Error', 'Gagal login: ${e.toString()}');
     }
+  }
+
+  String get token => "Bearer ${authStorage.read('token') ?? ''}";
+
+  void logout() {
+    authStorage.remove('token');
+    Get.offAllNamed('/login');
   }
 }

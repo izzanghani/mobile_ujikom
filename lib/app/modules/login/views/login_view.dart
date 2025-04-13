@@ -1,84 +1,138 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sislab/app/modules/register/views/register_view.dart';
+import 'package:wave/wave.dart';
+import 'package:wave/config.dart';
 
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
+
   @override
- Widget build(BuildContext context) {
-    LoginController controller = Get.put(LoginController());
+  Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
+    final blueTheme = HexColor('#007AFF');
+
     return Scaffold(
-      backgroundColor: HexColor('#feeee8'),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 70.0),
-              child: Lottie.network(
-                'https://gist.githubusercontent.com/olipiskandar/2095343e6b34255dcfb042166c4a3283/raw/d76e1121a2124640481edcf6e7712130304d6236/praujikom_kucing.json',
-                fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          /// 🌊 Wave Background - Fullscreen & Soft Waves
+          Positioned.fill(
+            child: WaveWidget(
+              config: CustomConfig(
+                gradients: [
+                  [Colors.blue.shade200, Colors.blue.shade50],
+                  [Colors.indigo.shade200, Colors.indigo.shade50],
+                ],
+                durations: [18000, 22000],
+                heightPercentages: [0.08, 0.10], // Rendah agar tidak mengganggu UI
+                blur: const MaskFilter.blur(BlurStyle.normal, 5),
+                gradientBegin: Alignment.topLeft,
+                gradientEnd: Alignment.bottomRight,
               ),
+              waveAmplitude: 0,
+              backgroundColor: Colors.white,
+              size: const Size(double.infinity, double.infinity),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                controller: controller.emailController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email',
-                  hintText: 'Masukan Email',
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 15.0,
-                right: 15.0,
-                top: 15,
-                bottom: 0,
-              ),
-              child: TextField(
-                controller: controller.passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                  hintText: 'Masukan Password',
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 50,
-              width: 250,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  controller.loginNow();
-                },
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
+          ),
+
+          /// 🔐 Login Form
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    'assets/lottie/1.json',
+                    fit: BoxFit.cover,
+                    height: 180,
                   ),
-                ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Selamat Datang!',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.indigo.shade800,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Silakan login ke akun Anda',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+
+                  /// Email Input
+                  TextField(
+                    controller: controller.emailController,
+                    style: const TextStyle(color: Colors.black87),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.9),
+                      labelText: 'Email',
+                      labelStyle: TextStyle(color: Colors.grey.shade800),
+                      hintText: 'Masukkan Email',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  /// Password Input
+                  TextField(
+                    controller: controller.passwordController,
+                    obscureText: true,
+                    style: const TextStyle(color: Colors.black87),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.9),
+                      labelText: 'Password',
+                      labelStyle: TextStyle(color: Colors.grey.shade800),
+                      hintText: 'Masukkan Password',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  /// Login Button
+                  Obx(() => ElevatedButton(
+                        onPressed: controller.isLoading.value ? null : () => controller.loginNow(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: blueTheme,
+                          minimumSize: const Size.fromHeight(50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          shadowColor: Colors.blueAccent,
+                          elevation: 6,
+                        ),
+                        child: controller.isLoading.value
+                            ? const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              )
+                            : const Text(
+                                'Login',
+                                style: TextStyle(fontSize: 18, color: Colors.white),
+                              ),
+                      )),
+                ],
               ),
             ),
-           
-           
-          ],
-        ),
+          ),
+        ],
       ),
     );
-  }}
+  }
+}

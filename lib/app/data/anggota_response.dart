@@ -1,15 +1,15 @@
 class AnggotaResponse {
   String? message;
-  List<Data>? data;
+  List<AnggotaData>? data;
 
   AnggotaResponse({this.message, this.data});
 
   AnggotaResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <AnggotaData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new AnggotaData.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class AnggotaResponse {
   }
 }
 
-class Data {
+class AnggotaData {
   int? id;
   String? codeAnggota;
   String? namaPeminjam;
@@ -34,7 +34,7 @@ class Data {
   String? createdAt;
   String? updatedAt;
 
-  Data(
+  AnggotaData(
       {this.id,
       this.codeAnggota,
       this.namaPeminjam,
@@ -44,7 +44,7 @@ class Data {
       this.createdAt,
       this.updatedAt});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  AnggotaData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     codeAnggota = json['code_anggota'];
     namaPeminjam = json['nama_peminjam'];
