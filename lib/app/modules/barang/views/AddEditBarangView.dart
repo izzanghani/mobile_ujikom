@@ -12,7 +12,7 @@ class AddBarangView extends StatelessWidget {
   AddBarangView({super.key})
       : isEdit = Get.arguments?['isEdit'] ?? false,
         barang = Get.arguments?['barang'] {
-    // Perbaikan di sini: inisialisasi form hanya sekali
+    // Perbaikan inisialisasi form hanya sekali menggunakan Future.microtask
     Future.microtask(() {
       if (isEdit && barang != null) {
         controller.fillForm(barang!);
@@ -167,7 +167,7 @@ class AddBarangView extends StatelessWidget {
           controller.selectedKategori.value = kategori;
         },
         items: controller.kategoriList.map((kategori) {
-          return DropdownMenuItem<KategoriData>(
+          return DropdownMenuItem<KategoriData>( 
             value: kategori,
             child: Text(kategori.namaKategori ?? '-'),
           );

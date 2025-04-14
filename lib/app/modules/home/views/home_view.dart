@@ -71,7 +71,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Universitas XYZ · Teknik Informatika',
+                    'Universitas · Teknik Informatika',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: 12,

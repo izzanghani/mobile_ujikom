@@ -31,7 +31,7 @@ class BarangController extends GetxController {
     fetchKategori();
   }
 
-  void fetchBarang() async {
+  Future<void> fetchBarang() async {
     final token = authStorage.read('token');
     if (token == null) return;
 
@@ -48,14 +48,18 @@ class BarangController extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final result = BarangResponse.fromJson(data);
-        barangList.value = result.data!;
+        barangList.value = result.data ?? [];
+      } else {
+        Get.snackbar("Error", "Gagal memuat data barang.");
       }
+    } catch (e) {
+      Get.snackbar("Error", "Terjadi kesalahan: $e");
     } finally {
       isLoading.value = false;
     }
   }
 
-  void fetchKategori() async {
+  Future<void> fetchKategori() async {
     final token = authStorage.read('token');
     if (token == null) return;
 
@@ -71,7 +75,9 @@ class BarangController extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final result = KategoriResponse.fromJson(data);
-        kategoriList.value = result.data!;
+        kategoriList.value = result.data ?? [];
+      } else {
+        Get.snackbar("Error", "Gagal memuat kategori.");
       }
     } catch (e) {
       Get.snackbar("Error", "Gagal memuat kategori: $e");
@@ -103,8 +109,8 @@ class BarangController extends GetxController {
       if (response.statusCode == 201) {
         fetchBarang();
         clearForm();
+        Get.back();
         Get.snackbar("Sukses", "Barang berhasil ditambahkan");
-        Get.offNamed('/barang');
       } else {
         final error = json.decode(response.body);
         Get.snackbar("Gagal", error['message'] ?? "Gagal menambahkan barang");
@@ -138,8 +144,8 @@ class BarangController extends GetxController {
       if (response.statusCode == 200) {
         fetchBarang();
         clearForm();
+        Get.back();
         Get.snackbar("Sukses", "Barang berhasil diperbarui");
-        Get.offNamed('/barang');
       } else {
         final error = json.decode(response.body);
         Get.snackbar("Gagal", error['message'] ?? "Gagal memperbarui barang");
@@ -182,6 +188,11 @@ class BarangController extends GetxController {
     selectedBarang.value = null;
   }
 
+  void initAddForm() {
+    clearForm();
+    codeController.text = generateKodeBarang();
+  }
+
   void fillForm(DataBarang barang) {
     selectedBarang.value = barang;
     codeController.text = barang.codeBarang ?? '';
@@ -190,32 +201,10 @@ class BarangController extends GetxController {
     detailController.text = barang.detail ?? '';
     jumlahController.text = barang.jumlah?.toString() ?? '';
 
-    // Tunggu data kategori tersedia dulu
-    if (kategoriList.isNotEmpty) {
-      selectedKategori.value = kategoriList.firstWhereOrNull(
-        (kategori) => kategori.id == barang.idKategori,
-      );
-    } else {
-      // Jika kategori belum tersedia, delay sedikit
-      ever<List<KategoriData>>(kategoriList, (_) {
-        selectedKategori.value = kategoriList.firstWhereOrNull(
-          (kategori) => kategori.id == barang.idKategori,
-        );
-      });
-    }
-  }
-
-  void goToEditBarang(DataBarang barang) {
-    fillForm(barang);
-    Get.toNamed('/barang/edit', arguments: {
-      'isEdit': true,
-      'barang': barang,
-    });
-  }
-
-  void goToDetailBarang(DataBarang barang) {
-    selectedBarang.value = barang;
-    Get.toNamed('/barang/detail', arguments: barang);
+    // Directly set selectedKategori to avoid unnecessary async code
+    selectedKategori.value = kategoriList.firstWhereOrNull(
+      (kategori) => kategori.id == barang.idKategori,
+    );
   }
 
   String generateKodeBarang() {
