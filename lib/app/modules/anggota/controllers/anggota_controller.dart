@@ -15,6 +15,7 @@ class AnggotaController extends GetxController {
   final emailController = TextEditingController();
   final teleponController = TextEditingController();
   final instansiController = TextEditingController();
+  final nimController = TextEditingController();  // Controller untuk NIM
 
   Rx<AnggotaData?> selectedAnggota = Rx<AnggotaData?>(null);
 
@@ -40,15 +41,17 @@ class AnggotaController extends GetxController {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final result = AnggotaResponse.fromJson(data);
+        final result = anggotaResponse.fromJson(data);
         anggotaList.value = result.data ?? [];
+      } else {
+        Get.snackbar("Error", "Gagal memuat data anggota");
       }
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> tambahAnggota({required String codeAnggota}) async {
+  Future<void> tambahAnggota() async {
     final token = authStorage.read('token');
     if (token == null) return;
 
@@ -61,7 +64,7 @@ class AnggotaController extends GetxController {
           "Authorization": "Bearer $token",
         },
         body: json.encode({
-          "code_anggota": codeAnggota,
+          "nim": nimController.text,  // NIM diisi manual
           "nama_peminjam": namaController.text,
           "email": emailController.text,
           "no_telepon": teleponController.text,
@@ -75,7 +78,7 @@ class AnggotaController extends GetxController {
         Get.snackbar("Sukses", "Anggota berhasil ditambahkan");
         Get.offNamed('/anggota');
       } else {
-        Get.snackbar("Gagal", "Gagal menambahkan anggota");
+        Get.snackbar("Gagal", "Gagal menambahkan anggota: ${response.body}");
       }
     } finally {
       isLoading.value = false;
@@ -108,8 +111,11 @@ class AnggotaController extends GetxController {
         Get.snackbar("Sukses", "Anggota berhasil diperbarui");
         Get.offNamed('/anggota');
       } else {
-        Get.snackbar("Gagal", "Gagal memperbarui anggota");
+        Get.snackbar("Gagal", "Gagal memperbarui anggota: ${response.body}");
       }
+    } catch (e) {
+      // Penanganan exception
+      Get.snackbar("Error", "Terjadi kesalahan: ${e.toString()}");
     } finally {
       isLoading.value = false;
     }
@@ -138,14 +144,8 @@ class AnggotaController extends GetxController {
     }
   }
 
-  String generateKodeAnggota() {
-    final now = DateTime.now();
-    return 'AGT${now.year}${_pad(now.month)}${_pad(now.day)}${_pad(now.hour)}${_pad(now.minute)}${_pad(now.second)}';
-  }
-
-  String _pad(int val) => val.toString().padLeft(2, '0');
-
   void clearForm() {
+    nimController.clear();  // Clear NIM field
     namaController.clear();
     emailController.clear();
     teleponController.clear();
@@ -155,19 +155,18 @@ class AnggotaController extends GetxController {
 
   void fillForm(AnggotaData anggota) {
     selectedAnggota.value = anggota;
+    nimController.text = anggota.nim ?? '';  // NIM diisi dari data anggota
     namaController.text = anggota.namaPeminjam ?? '';
     emailController.text = anggota.email ?? '';
     teleponController.text = anggota.noTelepon ?? '';
     instansiController.text = anggota.instansiLembaga ?? '';
   }
 
-  /// Navigasi ke halaman edit
   void goToEditAnggota(AnggotaData anggota) {
     fillForm(anggota);
-    Get.toNamed('/anggota/edit', arguments: anggota.id);
+    Get.toNamed('/anggota/edit', arguments: anggota);
   }
 
-  /// Navigasi ke halaman detail
   void goToDetailAnggota(AnggotaData anggota) {
     selectedAnggota.value = anggota;
     Get.toNamed('/anggota/detail', arguments: anggota);

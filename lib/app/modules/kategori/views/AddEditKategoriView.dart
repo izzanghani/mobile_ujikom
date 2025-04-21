@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sislab/app/data/anggota_response.dart';
-import 'package:sislab/app/modules/anggota/controllers/anggota_controller.dart';
+import 'package:sislab/app/data/kategoriResponse.dart';
+import 'package:sislab/app/modules/kategori/controllers/kategori_controller.dart';
 
-class AddAnggotaView extends StatefulWidget {
-  const AddAnggotaView({super.key});
+class AddEditKategoriView extends StatefulWidget {
+  const AddEditKategoriView({super.key});
 
   @override
-  State<AddAnggotaView> createState() => _AddAnggotaViewState();
+  State<AddEditKategoriView> createState() => _AddEditKategoriViewState();
 }
 
-class _AddAnggotaViewState extends State<AddAnggotaView> {
-  final controller = Get.put(AnggotaController());
+class _AddEditKategoriViewState extends State<AddEditKategoriView> {
+  final controller = Get.put(KategoriController());
   late bool isEdit;
-  AnggotaData? anggota;
+  KategoriData? kategori;
 
   @override
   void initState() {
     super.initState();
     isEdit = Get.arguments?['isEdit'] ?? false;
-    anggota = Get.arguments?['anggota'];
+    kategori = Get.arguments?['kategori'];
 
-    if (isEdit && anggota != null) {
-      controller.fillForm(anggota!);
+    if (isEdit && kategori != null) {
+      controller.fillForm(kategori!);
     } else {
       controller.clearForm();
     }
@@ -32,9 +32,9 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEdit ? 'Edit Anggota' : 'Tambah Anggota'),
+        title: Text(isEdit ? 'Edit Kategori' : 'Tambah Kategori'),
         centerTitle: true,
-        backgroundColor: isEdit ? Colors.orange.shade100 : Colors.blue.shade100,
+        backgroundColor: isEdit ? Colors.orange.shade100 : Colors.green.shade100,
         foregroundColor: Colors.black87,
         elevation: 0,
         leading: IconButton(
@@ -53,37 +53,29 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
                 padding: const EdgeInsets.all(16),
                 margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
-                  color: isEdit ? Colors.orange.shade50 : Colors.blue.shade50,
+                  color: isEdit ? Colors.orange.shade50 : Colors.green.shade50,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   children: [
                     Icon(
-                      isEdit ? Icons.edit : Icons.person_add,
-                      color: isEdit ? Colors.orange : Colors.blueAccent,
+                      isEdit ? Icons.edit : Icons.category,
+                      color: isEdit ? Colors.orange : Colors.green,
                       size: 32,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         isEdit
-                            ? "Ubah data anggota yang sudah ada."
-                            : "Masukkan data untuk menambahkan anggota baru.",
+                            ? "Ubah data kategori barang."
+                            : "Masukkan data untuk menambahkan kategori baru.",
                         style: const TextStyle(fontSize: 15),
                       ),
                     ),
                   ],
                 ),
               ),
-              _buildTextField(controller.nimController, 'NIM', Icons.numbers, isEnabled: !isEdit),
-              const SizedBox(height: 12),
-              _buildTextField(controller.namaController, 'Nama Peminjam', Icons.person),
-              const SizedBox(height: 12),
-              _buildTextField(controller.emailController, 'Email', Icons.email),
-              const SizedBox(height: 12),
-              _buildTextField(controller.teleponController, 'No. Telepon', Icons.phone),
-              const SizedBox(height: 12),
-              _buildTextField(controller.instansiController, 'Instansi/Lembaga', Icons.business),
+              _buildTextField(controller.namaKategoriController, 'Nama Kategori', Icons.label),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
@@ -100,20 +92,21 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
                         ? "Memproses..."
                         : isEdit
                             ? "Simpan Perubahan"
-                            : "Tambah Anggota",
+                            : "Tambah Kategori",
                     style: const TextStyle(fontSize: 16),
                   ),
                   onPressed: controller.isLoading.value
                       ? null
-                      : () {
-                          if (isEdit && anggota != null) {
-                            controller.updateAnggota(anggota!.id.toString());
+                      : () async {
+                          // Handling save action
+                          if (isEdit && kategori != null) {
+                            await controller.updateKategori(kategori!.id);
                           } else {
-                            controller.tambahAnggota();
+                            await controller.tambahKategori();
                           }
                         },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isEdit ? Colors.orange : Colors.blueAccent,
+                    backgroundColor: isEdit ? Colors.orange : Colors.green,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -128,10 +121,9 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, IconData icon, {bool isEnabled = true}) {
+  Widget _buildTextField(TextEditingController controller, String label, IconData icon) {
     return TextField(
       controller: controller,
-      enabled: isEnabled,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, color: Colors.blueGrey),
@@ -144,7 +136,7 @@ class _AddAnggotaViewState extends State<AddAnggotaView> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
+          borderSide: const BorderSide(color: Colors.green, width: 2),
         ),
       ),
     );

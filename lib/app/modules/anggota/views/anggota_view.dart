@@ -22,7 +22,7 @@ class AnggotaView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              controller.fetchAnggota(); // Refresh daftar anggota
+              controller.fetchAnggota(); // Memanggil fetchAnggota() untuk mengambil data terbaru
             },
           ),
         ],
@@ -62,7 +62,7 @@ class AnggotaView extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 16),
                 child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  leading: CircleAvatar(
+                  leading: const CircleAvatar(
                     backgroundColor: Colors.blueAccent,
                     radius: 24,
                     child: Icon(Icons.person, color: Colors.white, size: 30),
@@ -81,12 +81,13 @@ class AnggotaView extends StatelessWidget {
                   trailing: PopupMenuButton<String>(
                     onSelected: (value) {
                       if (value == 'edit') {
-                        controller.fillForm(data);
-                        Get.to(() => AddAnggotaView(), arguments: {
+                        controller.fillForm(data); // Mengisi form dengan data anggota yang dipilih
+                        Get.to(() =>  AddAnggotaView(), arguments: {
                           'isEdit': true,
                           'anggota': data,
                         });
                       } else if (value == 'detail') {
+                        controller.selectedAnggota.value = data; // Mengatur anggota yang dipilih untuk detail
                         Get.to(() => AnggotaDetailView(), arguments: data);
                       } else if (value == 'delete') {
                         _showDeleteDialog(context, controller, data);
@@ -133,8 +134,8 @@ class AnggotaView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          controller.clearForm();
-          Get.to(() => AddAnggotaView(), arguments: {
+          controller.clearForm(); // Membersihkan form sebelum menambah anggota baru
+          Get.to(() =>  AddAnggotaView(), arguments: {
             'isEdit': false,
           });
         },
@@ -146,7 +147,7 @@ class AnggotaView extends StatelessWidget {
     );
   }
 
-  // Dialog untuk konfirmasi penghapusan anggota
+  // Dialog konfirmasi untuk menghapus anggota
   void _showDeleteDialog(BuildContext context, AnggotaController controller, AnggotaData data) {
     showDialog(
       context: context,
@@ -162,8 +163,7 @@ class AnggotaView extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.warning_amber_rounded,
-                    color: Colors.redAccent, size: 48),
+                const Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 48),
                 const SizedBox(height: 16),
                 const Text(
                   "Hapus Anggota?",
@@ -196,7 +196,7 @@ class AnggotaView extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        controller.deleteAnggota(data.id.toString());
+                        controller.deleteAnggota(data.id.toString()); // Menghapus anggota
                         Navigator.of(context).pop();
                       },
                       label: const Text("Hapus", style: TextStyle(fontSize: 16)),

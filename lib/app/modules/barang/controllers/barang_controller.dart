@@ -48,7 +48,7 @@ class BarangController extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final result = BarangResponse.fromJson(data);
-        barangList.value = result.data ?? [];
+        barangList.value = result.dataBarang ?? [];
       } else {
         Get.snackbar("Error", "Gagal memuat data barang.");
       }
@@ -201,10 +201,14 @@ class BarangController extends GetxController {
     detailController.text = barang.detail ?? '';
     jumlahController.text = barang.jumlah?.toString() ?? '';
 
-    // Directly set selectedKategori to avoid unnecessary async code
-    selectedKategori.value = kategoriList.firstWhereOrNull(
-      (kategori) => kategori.id == barang.idKategori,
-    );
+    // Ambil ID kategori dari objek nested kategori
+    if (barang.kategori != null) {
+      selectedKategori.value = kategoriList.firstWhereOrNull(
+        (kategori) => kategori.id == barang.kategori!.id,
+      );
+    } else {
+      selectedKategori.value = null;
+    }
   }
 
   String generateKodeBarang() {

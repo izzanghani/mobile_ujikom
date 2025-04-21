@@ -5,7 +5,6 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sislab/app/modules/anggota/controllers/anggota_controller.dart';
 import 'package:sislab/app/modules/barang/controllers/barang_controller.dart';
-import 'package:sislab/app/modules/peminjaman/controllers/peminjaman_controller.dart';
 import 'package:sislab/app/modules/dashboard/views/profile_view.dart';
 import 'package:sislab/app/routes/app_pages.dart';
 
@@ -110,8 +109,7 @@ class _DashboardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final anggotaController = Get.put(AnggotaController());
     final barangController = Get.put(BarangController());
-    final peminjamanController = Get.put(PeminjamanController());
-
+  
     return Padding(
       padding: const EdgeInsets.all(16),
       child: SingleChildScrollView(
@@ -151,7 +149,7 @@ class _DashboardContent extends StatelessWidget {
                 children: [
                   _buildCard('Anggota', anggotaController.anggotaList.length.toString(), LucideIcons.users, () => Get.toNamed(Routes.ANGGOTA)),
                   _buildCard('Barang', barangController.barangList.length.toString(), LucideIcons.box, () => Get.toNamed(Routes.BARANG)),
-                  _buildCard('Peminjaman', peminjamanController.peminjamanList.length.toString(), LucideIcons.clipboardList, () => Get.toNamed(Routes.PEMINJAMAN)),
+                  _buildCard('Kategori', '5', LucideIcons.grid, () => Get.toNamed(Routes.KATEGORI)), // Ganti Peminjaman menjadi Kategori
                   _buildCard('Pengembalian', '1', LucideIcons.refreshCw, () {}),
                 ],
               );

@@ -1,3 +1,5 @@
+import 'dart:convert'; // <- Wajib untuk jsonDecode
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,7 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _getConnect.timeout = const Duration(seconds: 10); // optional
+    _getConnect.timeout = const Duration(seconds: 10);
   }
 
   @override
@@ -34,30 +36,23 @@ class LoginController extends GetxController {
         'password': passwordController.text.trim(),
       });
 
-      print("LOGIN RESPONSE: ${response.body}");
+      print("RAW LOGIN RESPONSE: ${response.bodyString}");
 
       isLoading.value = false;
 
-      if (response.statusCode == 200 && response.body != null) {
-        final token = response.body['access_token'];
-        if (token != null && token != "") {
-          authStorage.write('token', token);
-          Get.offAll(() => const DashboardView());
-        } else {
-          Get.snackbar('Login Gagal', 'Token tidak ditemukan dalam respons.');
-        }
-      } else {
-        final errorMessage = response.body?['message'] ??
-            response.body?['error'] ??
-            "Login gagal. Periksa email dan password.";
+      // Bersihkan karakter 'v' di awal jika ada
+      final raw = response.bodyString ?? '';
+      final clean = raw.startsWith('v') ? raw.substring(1) : raw;
 
-        Get.snackbar(
-          'Login Gagal',
-          errorMessage.toString(),
-          icon: const Icon(Icons.error),
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+      // Decode JSON manual karena response.body gagal diparse otomatis
+      final Map<String, dynamic> decoded = jsonDecode(clean);
+      final String token = decoded['access_token'];
+
+      if (token.isNotEmpty) {
+        authStorage.write('token', token);
+        Get.offAll(() => const DashboardView());
+      } else {
+        Get.snackbar('Login Gagal', 'Token tidak ditemukan dalam respons.');
       }
     } catch (e) {
       isLoading.value = false;

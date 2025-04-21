@@ -69,7 +69,7 @@ class AnggotaDetailView extends StatelessWidget {
                   _buildDetailItem(Icons.apartment_outlined, "Instansi", anggota.instansiLembaga),
                   _buildDetailItem(Icons.phone_android, "No. Telepon", anggota.noTelepon),
                   _buildDetailItem(Icons.email_outlined, "Email", anggota.email),
-                  _buildDetailItem(Icons.qr_code_2_outlined, "Kode Anggota", anggota.codeAnggota),
+                  _buildDetailItem(Icons.qr_code_2_outlined, "NIM", anggota.nim), // Mengganti ke nim
                 ],
               ),
             ),

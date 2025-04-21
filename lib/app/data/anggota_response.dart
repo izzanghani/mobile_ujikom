@@ -1,10 +1,10 @@
-class AnggotaResponse {
+class anggotaResponse {
   String? message;
   List<AnggotaData>? data;
 
-  AnggotaResponse({this.message, this.data});
+  anggotaResponse({this.message, this.data});
 
-  AnggotaResponse.fromJson(Map<String, dynamic> json) {
+  anggotaResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['data'] != null) {
       data = <AnggotaData>[];
@@ -26,7 +26,7 @@ class AnggotaResponse {
 
 class AnggotaData {
   int? id;
-  String? codeAnggota;
+  String? nim;
   String? namaPeminjam;
   String? email;
   String? noTelepon;
@@ -36,7 +36,7 @@ class AnggotaData {
 
   AnggotaData(
       {this.id,
-      this.codeAnggota,
+      this.nim,
       this.namaPeminjam,
       this.email,
       this.noTelepon,
@@ -46,7 +46,7 @@ class AnggotaData {
 
   AnggotaData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    codeAnggota = json['code_anggota'];
+    nim = json['nim'];
     namaPeminjam = json['nama_peminjam'];
     email = json['email'];
     noTelepon = json['no_telepon'];
@@ -58,7 +58,7 @@ class AnggotaData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['code_anggota'] = this.codeAnggota;
+    data['nim'] = this.nim;
     data['nama_peminjam'] = this.namaPeminjam;
     data['email'] = this.email;
     data['no_telepon'] = this.noTelepon;
